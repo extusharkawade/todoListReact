@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import "reactjs-popup/dist/index.css";
 import { Modal, ModalHeader } from "reactstrap";
+
 export const TodoItem = (props) => {
   const [editModal, seteditModal] = useState(false);
   const [deleteModel, setdeleteModel] = useState(false);
@@ -61,7 +62,7 @@ export const TodoItem = (props) => {
           <ModalHeader toggle={() => seteditModal(!editModal)}>
             <span> Edit Form</span>
             <form onSubmit={onSubmit}>
-              <div className="form-group">
+              <div data-testid="editDialogue" className="form-group">
                 <label htmlFor="newTitle">Title</label>
                 <input
                   type="text"
@@ -111,8 +112,8 @@ export const TodoItem = (props) => {
           }}
         >
           <ModalHeader toggle={() => setdeleteModel(!deleteModel)}>
-            <span class="text-primary"></span>
-            <div class="display-7">
+            <span className="text-primary"></span>
+            <div data-testid="deleteConfirmationBox" className="display-7">
               Are you sure you wanna delete '{props.todo.title}'?{" "}
             </div>
             <br></br>
@@ -125,7 +126,7 @@ export const TodoItem = (props) => {
                   setdeleteModel(!deleteModel);
                 }}
               >
-                Delete{" "}
+                Delete
               </button>
               <button
                 type="button"
@@ -134,7 +135,7 @@ export const TodoItem = (props) => {
                   setdeleteModel(!deleteModel);
                 }}
               >
-                Cancel{" "}
+                Cancel
               </button>
             </span>
           </ModalHeader>

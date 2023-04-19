@@ -44,9 +44,7 @@ describe(AddTodo, () => {
 
   test("Test add todo form title and description with valid inputs", () => {
     // const titleNode = getAllByTestId("titleId");
-    const mockOnSubmit = jest.fn(() => {
-      Promise;
-    });
+    const mockOnSubmit = jest.fn();
     const { getByLabelText, getByRole, wrapper } = render(
       <AddTodo onSubmit={mockOnSubmit()} />,
       {
