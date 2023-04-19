@@ -4,13 +4,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { DbErrorModal } from "./DbErrorModal";
 
-export const AddTodo = (props) => {
-  const [isEdit, setisEdit] = useState(false);
+export const AddTodo = () => {
   const [title, setTitle] = useState("");
   const [desc, setdesc] = useState("");
-  const [srno, setsrno] = useState(5);
+  const [srno, setsrno] = useState(0);
   const [error, seterror] = useState(false);
-  const [descError, setdescError] = useState("");
+  const [descError, setdescError] = useState(false);
   const [dbError, setdbError] = useState(false);
   const [toDos, setTodos] = useState([]);
 
@@ -20,20 +19,23 @@ export const AddTodo = (props) => {
       .get("http://localhost:3031/todo")
       .then((res) => setTodos(res.data))
       .catch((err) => {
-        return console.log(err), setdbError(true);
+        return setdbError(true);
       });
   }, []);
 
   const submit = (e) => {
     e.preventDefault();
-    <DbErrorModal />;
 
     title.length < 3 && seterror(true);
     desc.length < 5 && setdescError(true);
 
     console.log("Title and description", title, desc);
     if (!(title.length < 3 || desc.length < 5)) {
-      setsrno(toDos[toDos.length - 1].srno + 1);
+      if (toDos.length === 0) {
+        setsrno(1);
+      } else {
+        setsrno(toDos[toDos.length - 1].srno + 1);
+      }
       const task = { title, desc };
       console.log("here is task", task);
 
@@ -53,7 +55,6 @@ export const AddTodo = (props) => {
 
       seterror(false);
       setdescError(false);
-      setisEdit(false);
     }
   };
   const titleValidation = () => {
@@ -85,7 +86,7 @@ export const AddTodo = (props) => {
   return (
     <div className="container my-3">
       <form onSubmit={submit}>
-        <div className="mb-3">
+        <div className="mb-3" data-testid="todo-title">
           <label htmlFor="title" className="form-label">
             Todo Title
           </label>
@@ -97,17 +98,17 @@ export const AddTodo = (props) => {
               titleValidation();
             }}
             className="form-control"
-            id="titleId"
-            aria-describedby="emailHelp"
+            id="title"
+            aria-describedby="titleH"
           />
           {error ? (
-            <span className="fw-light text-danger">Enter valid title </span>
+            <div className="fw-light text-danger">Enter valid title</div>
           ) : (
             <div></div>
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-3" data-testid="todo-desc">
           <label htmlFor="desc" className="form-label">
             Description
           </label>
@@ -130,20 +131,14 @@ export const AddTodo = (props) => {
 
         {dbError ? <DbErrorModal dbModal={true} /> : <div></div>}
 
-        {isEdit ? (
-          <button type="submit" className="btn btn-sm btn-success">
-            Update Todo
-          </button>
-        ) : (
-          <button type="submit" className="btn btn-sm btn-success">
-            Add Todo
-          </button>
-        )}
+        <button type="submit" className="btn btn-sm btn-success">
+          Add Todo
+        </button>
       </form>
-      {/* <ToDos arr={toDos} onDelete={onDelete} onEdit={onEdit} /> */}
       <hr></hr>
       <div>
         <Link
+          data-testid="buttonId"
           to="/TodoItems"
           button
           type="button"

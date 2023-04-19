@@ -71,32 +71,12 @@ export const ToDos = (props) => {
       {console.log("todoo", toDos)}
       <br></br>
 
-      {/* {() => {
-                if (loading === true) {
-                    <div className="container">
-                        <div class="spinner-border text-muted"></div>
-                        <div class="spinner-border text-primary"></div>
-                        <div class="spinner-border text-success"></div>
-                        console.log("in iff");
-                    </div>
-                }
-                else if (toDos.length === 0) {
-                    <h1>Nothing to display</h1>
-                    console.log("in elsse if")
-                }
-                else {
-                    console.log("hello");
-                    toDos.slice(0).reverse().map((todo) => {
-                        return <TodoItem todo={todo} key={todo.srno} onDelete={onDelete} onEdit={onEdit} />
-                    })
-                }
-            }} */}
       {dbError ? <DbErrorModal dbModal={true} /> : <div></div>}
 
       {loading ? (
         <div>
-          <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
+          <div className="spinner-border text-primary" role="status">
+            <span className="sr-only">Loading...</span>
           </div>
         </div>
       ) : toDos.length > 0 ? (
