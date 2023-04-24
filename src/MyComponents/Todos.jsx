@@ -27,7 +27,6 @@ export const ToDos = (props) => {
     axios
       .delete(path)
       .then(() => {
-        alert("Post deleted!");
         return setdbError(false);
       })
       .catch((err) => {

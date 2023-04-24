@@ -16,10 +16,10 @@ export const TodoItem = (props) => {
     console.log("This is new Title", editedTitle);
     if (editedTitle.length >= 3) {
       setnewTitleError(false);
+      setnewTitle(editedTitle);
     } else {
       setnewTitleError(true);
     }
-    setnewTitle(editedTitle);
   };
 
   const editDescValidation = (val) => {
@@ -35,6 +35,7 @@ export const TodoItem = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log("e.target.value;", e.target.value);
     console.log("onSubmit", newTitle);
     console.log("onSubmit", newDesc);
 
@@ -51,86 +52,81 @@ export const TodoItem = (props) => {
     }
   };
   return (
-    <>
-      <div>
-        <Modal
-          isOpen={editModal}
-          toggle={() => {
-            seteditModal(!editModal);
-          }}
-        >
-          <ModalHeader toggle={() => seteditModal(!editModal)}>
-            <span> Edit Form</span>
-            <form onSubmit={onSubmit}>
-              <div data-testid="editDialogue" className="form-group">
-                <label htmlFor="newTitle">Title</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="newTitle"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter new title"
-                  onChange={editTitleValidation}
-                />
-                {newTitleError ? (
-                  <span className="fw-light text-danger">
-                    Enter valid Title
-                  </span>
-                ) : (
-                  <span></span>
-                )}
-              </div>
-              <br></br>
-              <div className="form-group">
-                <label htmlFor="newDesc">Description</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="newDesc"
-                  placeholder="Type new description"
-                  onChange={editDescValidation}
-                />
-                {newDescError ? (
-                  <span className="fw-light text-danger">
-                    Enter valid description
-                  </span>
-                ) : (
-                  <span></span>
-                )}
-              </div>
-              <br></br>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
-          </ModalHeader>
-        </Modal>
-        <Modal
-          isOpen={deleteModel}
-          toggle={() => {
-            setdeleteModel(!deleteModel);
-          }}
-        >
-          <ModalHeader toggle={() => setdeleteModel(!deleteModel)}>
-            <span className="text-primary"></span>
-            <div data-testid="deleteConfirmationBox" className="display-7">
-              Are you sure you wanna delete '{props.todo.title}'?{" "}
+    <div data-testid="editModalTestId">
+      <Modal
+        isOpen={editModal}
+        toggle={() => {
+          seteditModal(!editModal);
+        }}
+      >
+        <ModalHeader toggle={() => seteditModal(!editModal)}>
+          <span> Edit Form</span>
+          <form onSubmit={onSubmit}>
+            <div data-testid="editDialogue" className="form-group">
+              <label htmlFor="newTitle">Title</label>
+              <input
+                type="text"
+                className="form-control"
+                id="newTitle"
+                aria-describedby="emailHelp"
+                placeholder="Enter new title"
+                onChange={editTitleValidation}
+              />
+              {newTitleError ? (
+                <span className="fw-light text-danger">Enter valid Title</span>
+              ) : (
+                <span></span>
+              )}
             </div>
             <br></br>
+            <div className="form-group">
+              <label htmlFor="newDesc">Description</label>
+              <input
+                type="text"
+                className="form-control"
+                id="newDesc"
+                placeholder="Type new description"
+                onChange={editDescValidation}
+              />
+              {newDescError ? (
+                <span className="fw-light text-danger">
+                  Enter valid description
+                </span>
+              ) : (
+                <span></span>
+              )}
+            </div>
+            <br></br>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        </ModalHeader>
+      </Modal>
+      <Modal
+        isOpen={deleteModel}
+        toggle={() => {
+          setdeleteModel(!deleteModel);
+        }}
+      >
+        <ModalHeader toggle={() => setdeleteModel(!deleteModel)}>
+          <span className="text-primary"></span>
+          <div data-testid="deleteConfirmationBox" className="display-7">
+            Are you sure you wanna delete '{props.todo.title}'? <br></br>
             <span>
               <button
                 type="button"
-                class="btn btn-sm btn-danger me-1"
+                className="btn btn-sm btn-danger me-1"
                 onClick={() => {
                   props.onDelete(props.todo);
                   setdeleteModel(!deleteModel);
                 }}
               >
-                Delete
+                Delete1
               </button>
               <button
                 type="button"
-                class="btn btn-sm btn-primary"
+                className="btn btn-sm btn-primary"
                 onClick={() => {
                   setdeleteModel(!deleteModel);
                 }}
@@ -138,38 +134,37 @@ export const TodoItem = (props) => {
                 Cancel
               </button>
             </span>
-          </ModalHeader>
-        </Modal>
+          </div>
+        </ModalHeader>
+      </Modal>
 
-        <div data-testid="singleTodo">
-          <h4>{props.todo.title} </h4>
-          <p>{props.todo.desc} </p>
-          <button
-            type="button"
-            className="btn btn-sm btn-danger me-1"
-            onClick={() => {
-              setdeleteModel(true);
-            }}
-          >
-            {" "}
-            Delete{" "}
-          </button>
+      <div data-testid="singleTodo">
+        <h4>{props.todo.title} </h4>
+        <p>{props.todo.desc} </p>
+        <button
+          type="button"
+          className="btn btn-sm btn-danger me-1"
+          onClick={() => {
+            setdeleteModel(true);
+          }}
+        >
+          Delete
+        </button>
 
-          <button
-            type="button"
-            className="btn btn-sm btn-primary"
-            onClick={() => {
-              seteditModal(true);
-              console.log("newTitle", newTitle);
-              console.log("newDesc", newDesc);
-            }}
-          >
-            {" "}
-            Edit{" "}
-          </button>
-        </div>
+        <button
+          type="button"
+          className="btn btn-sm btn-primary"
+          onClick={() => {
+            seteditModal(true);
+            console.log("newTitle", newTitle);
+            console.log("newDesc", newDesc);
+          }}
+        >
+          {" "}
+          Edit{" "}
+        </button>
       </div>
       <hr></hr>
-    </>
+    </div>
   );
 };

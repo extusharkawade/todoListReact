@@ -10,20 +10,22 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { ToDos } from "../Todos";
-
+import { History } from "history";
+import { createMemoryHistory } from "history";
 afterEach(() => {
   cleanup();
 });
-//   it("Add Todo button should add todo in the todos list", () => {
-//     const { getByRole,get } = render(<AddTodo />);
-//     const addTodoBtn = getByRole("button", { name: "Add Todo" });
-//     fireEvent.click(addTodoBtn);
 
-//   });
-// });
+const renderAddTodo = () => {
+  const methods = render(<AddTodo />, {
+    wrapper: BrowserRouter,
+  });
+  return methods;
+};
+
 describe(AddTodo, () => {
   test("Should render AddTodo Component and check if Todo Title and desc label is showing or not", () => {
-    render(<AddTodo />, { wrapper: BrowserRouter });
+    renderAddTodo();
 
     const titleElement = screen.getByTestId("todo-title");
     const descElement = screen.getByTestId("todo-desc");
@@ -35,7 +37,8 @@ describe(AddTodo, () => {
   });
 
   test("Should fire Add Todo button", () => {
-    const { getByRole } = render(<AddTodo />, { wrapper: BrowserRouter });
+    const { getByRole } = renderAddTodo();
+    // const { getByRole } = render(<AddTodo />, { wrapper: BrowserRouter });
     const addTodoBtn = getByRole("button", { name: "Add Todo" });
     act(() => {
       fireEvent.click(addTodoBtn);
@@ -65,13 +68,8 @@ describe(AddTodo, () => {
   });
 
   test("Test invalid title", () => {
-    const { getByLabelText, container } = render(<AddTodo />, {
-      wrapper: BrowserRouter,
-    });
+    const { getByLabelText, container } = renderAddTodo();
     const titleInput = getByLabelText("Todo Title");
-    // fireEvent.change(titleInput, {
-    //   target: { value: "To" },
-    // });
     act(() => {
       userEvent.type(titleInput, "Go");
     });
@@ -80,27 +78,17 @@ describe(AddTodo, () => {
   });
 
   test("test valid title", () => {
-    const { getByLabelText, container } = render(<AddTodo />, {
-      wrapper: BrowserRouter,
-    });
+    const { getByLabelText, container } = renderAddTodo();
     const TitleInput = getByLabelText("Todo Title");
-    // fireEvent.change(TitleInput, {
-    //   target: { value: "Go to the market" },
-    // });
     act(() => {
       userEvent.type(TitleInput, "Go to the home");
     });
-
     expect(container.innerHTML).not.toMatch("Enter valid title");
   });
+
   test("Test invalid description", () => {
-    const { getByLabelText, container } = render(<AddTodo />, {
-      wrapper: BrowserRouter,
-    });
+    const { getByLabelText, container } = renderAddTodo();
     const descInput = getByLabelText("Description");
-    // fireEvent.change(descInput, {
-    //   target: { value: "bri" },
-    // });
     act(() => {
       userEvent.type(descInput, "Go");
     });
@@ -108,9 +96,7 @@ describe(AddTodo, () => {
   });
 
   test("Test valid description", async () => {
-    const { getByLabelText, container } = render(<AddTodo />, {
-      wrapper: BrowserRouter,
-    });
+    const { getByLabelText, container } = renderAddTodo();
     const descInput = getByLabelText("Description");
     act(() => {
       userEvent.type(descInput, "go to market and bring maggieeeeee");
@@ -119,9 +105,7 @@ describe(AddTodo, () => {
   });
 
   test("View task button should be on page", () => {
-    const { getByRole } = render(<AddTodo />, {
-      wrapper: BrowserRouter,
-    });
+    const { getByRole } = renderAddTodo();
     const viewTaskLink = getByRole("link", { name: "View Tasks" });
     expect(viewTaskLink).toBeInTheDocument();
   });
@@ -159,4 +143,25 @@ describe(AddTodo, () => {
   //   userEvent.click(viewTaskBtn);
   //   expect(screen.getByTestId("todos-component")).toBeInTheDocument();
   // });
+
+  test("Test view task button", async () => {
+    const history = createMemoryHistory({ initialEntries: ["/TodoItems"] });
+
+    const { getByRole, getByLabelText, container, debug } = renderAddTodo();
+    const linkElement = screen.getByTestId("buttonId");
+    act(() => {
+      userEvent.click(linkElement);
+    });
+
+    expect(history.location.pathname).toBe("/TodoItems");
+    // const viewTaskBtn = screen.getByTestId("buttonId");
+    //const viewTaskBtn = getByRole("link", { name: "View Tasks" });
+    //const addTodoBtn = getByRole("button", { name: "Add Todo" });
+    // act(() => {
+    //   userEvent.click(viewTaskBtn);
+    // });
+
+    // // await new Promise((r) => setTimeout(r, 1000));
+    // expect(container.innerHTML).not.toMatch(addTodoBtn.textContent);
+  });
 });
